@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
+
     @Bean
     public UserDetailsService users() {
         var user = User.withUsername("username")

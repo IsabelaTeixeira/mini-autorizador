@@ -13,13 +13,12 @@ public class Card {
     private String cardNumber;
 
     @Column(nullable = false)
-    @JsonProperty("senha")
+    @JsonProperty("senhaCartao")
     private String password;
 
     @Column(nullable = false)
+    @JsonProperty("valor")
     private BigDecimal balance;
-
-    protected Card() {}
 
     public Card(String cardNumber, String password) {
         this.cardNumber = cardNumber;

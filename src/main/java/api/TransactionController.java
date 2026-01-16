@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import service.CardService;
 
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/transacoes")
 public class TransactionController {
 
     private final CardService service;
@@ -18,7 +18,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> transact(@RequestBody TransactionRequest request) {
+    public ResponseEntity<String> authorize(@RequestBody TransactionRequest request) {
 
         AuthorizationResult result = service.authorizeTransaction(
                 request.cardNumber(),
@@ -26,12 +26,13 @@ public class TransactionController {
                 request.amount()
         );
 
-        return switch (result) {
-            case OK -> ResponseEntity.status(HttpStatus.CREATED).body("OK");
-            case CARD_NOT_FOUND -> ResponseEntity.unprocessableEntity().body("CARD_NOT_FOUND");
-            case INVALID_PASSWORD -> ResponseEntity.unprocessableEntity().body("INVALID_PASSWORD");
-            case INSUFFICIENT_BALANCE -> ResponseEntity.unprocessableEntity().body("INSUFFICIENT_BALANCE");
-        };
+        if (result.isApproved()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+        }
+
+        return ResponseEntity
+                .unprocessableEntity()
+                .body(result.getContractValue());
     }
 }
 

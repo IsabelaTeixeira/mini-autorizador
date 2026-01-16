@@ -18,7 +18,7 @@ public class CardService {
     }
 
     @Transactional
-public AuthorizationResult  authorizeTransaction(String cardNumber, String password, BigDecimal amount) {
+    public AuthorizationResult  authorizeTransaction(String cardNumber, String password, BigDecimal amount) {
 
         Optional<Card> optionalCard = repository.findById(cardNumber);
 
